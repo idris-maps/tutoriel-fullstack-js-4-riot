@@ -1,0 +1,552 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+    <meta charset='utf-8'>
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <meta name="description" content="Tutoriel-fullstack-js-4-riot : Tutoriel Fullstack JavaScript - Chapitre 4 - Riot">
+
+    <link rel="stylesheet" type="text/css" media="screen" href="stylesheets/stylesheet.css">
+
+    <title>Tutoriel-fullstack-js-4-riot</title>
+  </head>
+
+  <body>
+
+    <!-- HEADER -->
+    <div id="header_wrap" class="outer">
+        <header class="inner">
+          <a id="forkme_banner" href="https://github.com/idris-maps/tutoriel-fullstack-js-4-riot">View on GitHub</a>
+
+          <h1 id="project_title">Tutoriel-fullstack-js-4-riot</h1>
+          <h2 id="project_tagline">Tutoriel Fullstack JavaScript - Chapitre 4 - Riot</h2>
+
+            <section id="downloads">
+              <a class="zip_download_link" href="https://github.com/idris-maps/tutoriel-fullstack-js-4-riot/zipball/master">Download this project as a .zip file</a>
+              <a class="tar_download_link" href="https://github.com/idris-maps/tutoriel-fullstack-js-4-riot/tarball/master">Download this project as a tar.gz file</a>
+            </section>
+        </header>
+    </div>
+
+    <!-- MAIN CONTENT -->
+    <div id="main_content_wrap" class="outer">
+      <section id="main_content" class="inner">
+        <h1>
+<a id="riot" class="anchor" href="#riot" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Riot</h1>
+
+<h2>
+<a id="quest-ce-quun-composant" class="anchor" href="#quest-ce-quun-composant" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Qu'est-ce qu'un composant?</h2>
+
+<p>Le dévéloppement par composants a été popularisé par la librairie <a href="https://facebook.github.io/react/">ReactJS</a> de Facebook. Un composant est un élément HTML contenant la vue ainsi que les controleurs qui y sont associés. Dans notre application nous avons deux parties: </p>
+
+<ul>
+<li>la liste <code>&lt;div id="liste"&gt;</code>
+</li>
+<li>le formulaire pour ajouter quelque chose à faire ou supprimer ce qui a été fait, <code>&lt;div id="formulaire"&gt;</code>. </li>
+</ul>
+
+<p>Une fois transformés en composants, le corps du document HTML ressemblera à ça:</p>
+
+<pre><code>&lt;div id="contenu"&gt;
+ &lt;a-faire-liste&gt;&lt;/a-faire-liste&gt;
+ &lt;a-faire-formulaire&gt;&lt;/a-faire-formulaire&gt;
+&lt;/div&gt;
+</code></pre>
+
+<h2>
+<a id="pourquoi-riot" class="anchor" href="#pourquoi-riot" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Pourquoi Riot?</h2>
+
+<p>J'ai choisi d'utiliser Riot plutôt que React. D'une part parce que Riot est une librairie beaucoup plus légère. Et d'autre part parce que contrairement à React, qui une syntaxe bien à elle, Riot n'utilise que du javascript tout à fait classique.</p>
+
+<h3>
+<a id="mise-en-place" class="anchor" href="#mise-en-place" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Mise en place</h3>
+
+<p>Créez un dossier <code>4.riot</code> et initialisez NPM.</p>
+
+<pre><code>$ npm init
+</code></pre>
+
+<p>Téléchargez les librairies <code>riot</code> et <code>riotify</code>. <code>riotify</code> comme <code>browserify-handlebars</code> dans le <a href="link_to_do">chapitre précédant</a> sert à convertir les fichiers <code>.tag</code> de riot en javascript lors de la construction du scripte final avec <code>browserify</code>.</p>
+
+<pre><code>$ npm install riot riotify --save
+</code></pre>
+
+<p>Créez un fichier <code>main.js</code> et un dossier <code>public</code> à la racine du projet et ajoutez un scripte <code>build</code> à <code>package.json</code>. Nous y ajoutons également un scripte <code>watch</code> qui met à jour <code>public/script.js</code> automatiquement pendant que nous nous travaillons dessus.</p>
+
+<pre><code>{
+  "name": "4.riot",
+  "version": "1.0.0",
+  "description": "",
+  "main": "main.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" &amp;&amp; exit 1",
+    "build": "browserify main.js -o public/script.js -t riotify | minify public/script.js -o public/script.js",
+    "watch": "watchify main.js -o public/script.js -t riotify"
+  },
+  "author": "idris-maps.com",
+  "license": "GPL-2.0",
+  "dependencies": {
+    "riot": "^2.3.18",
+    "riotify": "^1.0.0"
+  }
+}
+</code></pre>
+
+<p>Dans <code>public</code>, ajoutez <code>style.css</code> du <a href="link_to_do">chapitre "Mise en page"</a> et créez un fichier <code>index.html</code> comme suit.</p>
+
+<pre><code>&lt;!doctype html&gt;
+&lt;html&gt;
+ &lt;head&gt;
+  &lt;meta charset="utf-8"&gt;
+  &lt;meta name="viewport" content="width=device-width, initial-scale=1"/&gt;
+  &lt;title&gt;Riot&lt;/title&gt;
+  &lt;link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous"&gt;
+&lt;!-- notre feuille de style --&gt;
+  &lt;link rel="stylesheet" href="style.css"&gt;
+ &lt;/head&gt;
+ &lt;body&gt;
+  &lt;div id="contenu"&gt;
+   &lt;h1&gt;À faire&lt;/h1&gt;
+   &lt;a-faire-liste&gt;&lt;/a-faire-liste&gt;
+   &lt;a-faire-formulaire&gt;&lt;/a-faire-formulaire&gt;
+  &lt;/div&gt;
+  &lt;script src="script.js"&gt;&lt;/script&gt;
+ &lt;/body&gt;
+&lt;/html&gt;
+</code></pre>
+
+<p>Créez un dossier <code>lib</code> et copiez y <code>Modele-a-faire.js</code> du <a href="link_to_do">chapitre 2</a> et créez un dossier <code>composants</code>.</p>
+
+<p>Notre dossier <code>4.riot</code> ressemble à ça:</p>
+
+<pre><code>4.riot
+  -lib
+    -composants
+    Modele-a-faire.js
+  -node_modules
+    ...
+  -public
+    index.html
+    style.css
+  main.js
+  package.json
+</code></pre>
+
+<h3>
+<a id="le-composant-a-faire-liste" class="anchor" href="#le-composant-a-faire-liste" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Le composant <code>&lt;a-faire-liste&gt;</code>
+</h3>
+
+<p>Dans <code>lib/composants</code>, créez un fichier <code>a-faire-liste.tag</code></p>
+
+<pre><code>&lt;div class="liste-element a-faire"&gt;
+
+ &lt;div class="liste-element-info"&gt;
+  &lt;div class="liste-element-texte"&gt;
+   &lt;p&gt;En cours de modification&lt;/p&gt;
+  &lt;/div&gt;
+  &lt;div class="liste-element-modif"&gt;
+   &lt;span class="glyphicon glyphicon-pencil"&gt;&lt;/span&gt;
+  &lt;/div&gt;
+  &lt;div class="liste-element-statut"&gt;
+   &lt;span class="glyphicon glyphicon-ok"&gt;&lt;/span&gt;
+  &lt;/div&gt;
+ &lt;/div&gt;
+
+ &lt;div class="liste-element-maj"&gt;
+  &lt;div class="liste-element-maj-input"&gt;
+   &lt;input class="form-control" id="liste-element-maj-input" type="text"&gt;
+  &lt;/div&gt;
+  &lt;div class="liste-element-maj-bouton"&gt;
+   &lt;button class="btn btn-primary" id="liste-element-maj-bouton"&gt;OK&lt;/button&gt;
+  &lt;/div&gt;
+ &lt;/div&gt;
+
+&lt;/div&gt; 
+</code></pre>
+
+<p>J'ai pris le HTML d'un des éléments de liste de <code>index.html</code> du <a href="link_to_do">chapitre 1</a>. Celui qui est en cours de modification.</p>
+
+<p>Créez une balise <code>&lt;a-faire-liste&gt;</code> qui englobe tout le HTML et ajoutez y une balise <code>&lt;script&gt;</code>.</p>
+
+<pre><code>&lt;a-faire-liste&gt;
+ &lt;!-- le HTML --&gt;
+ &lt;script&gt;&lt;/script&gt;
+&lt;/a-faire-liste&gt;
+</code></pre>
+
+<h4>
+<a id="boucle" class="anchor" href="#boucle" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Boucle</h4>
+
+<p>Pour créer une boucle qui ajoute une balise <code>&lt;div class="liste-element a-faire"&gt;</code> pour chaque élément du modèle, nous lui ajoutons <code>each={ liste }</code>.</p>
+
+<pre><code>&lt;div class="liste-element a-faire" each={ liste }&gt;
+</code></pre>
+
+<h4>
+<a id="afficher-une-clé-de-chaque-élément" class="anchor" href="#afficher-une-cl%C3%A9-de-chaque-%C3%A9l%C3%A9ment" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Afficher une clé de chaque élément</h4>
+
+<p>Nous souhaitons avoir la clé <code>text</code> de l'élément à la place de <code>En cours de modification</code>.</p>
+
+<pre><code>&lt;p&gt;En cours de modification&lt;/p&gt;
+</code></pre>
+
+<p>devient</p>
+
+<pre><code>&lt;p&gt;{ text }&lt;/p&gt;
+</code></pre>
+
+<h4>
+<a id="conditions" class="anchor" href="#conditions" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Conditions</h4>
+
+<p><strong>Les classes de l'élément de la liste</strong></p>
+
+<p>Si l'élément est <code>fait</code> nous voulons que les classes de la <code>&lt;div&gt;</code> soient <code>class="liste-element fait"</code>, sinon <code>class="liste-element a-faire"</code>.</p>
+
+<pre><code>&lt;div class="liste-element a-faire" each={ liste }
+</code></pre>
+
+<p>devient</p>
+
+<pre><code>&lt;div each= {liste} class="{fait ? 'liste-element fait' : 'liste-element a-faire'}"&gt;
+</code></pre>
+
+<p><strong>Les classes de l'icône pour basculer <code>fait</code></strong></p>
+
+<p>De la même manière</p>
+
+<pre><code>&lt;span class="glyphicon glyphicon-ok"&gt;&lt;/span&gt;
+</code></pre>
+
+<p>devient</p>
+
+<pre><code>&lt;span class="{fait ? 'glyphicon glyphicon-remove' : 'glyphicon glyphicon-ok'}"&gt;&lt;/span&gt;
+</code></pre>
+
+<p><strong>Le formulaire de mise à jour</strong></p>
+
+<p>Nous n'allons ajouter la balise <code>&lt;div class="liste-element-maj"&gt;</code> que si l'élément est en cours de mise à jour.</p>
+
+<pre><code>&lt;div if={ maj } class="liste-element-maj"&gt;
+</code></pre>
+
+<h4>
+<a id="le-contexte-du-composant" class="anchor" href="#le-contexte-du-composant" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Le contexte du composant</h4>
+
+<p>Chaque composant a un contexte <code>this</code> à l'intérieur d'une balise <code>&lt;script&gt;</code>. Nous allons le lier à une variable <code>ctx</code>. </p>
+
+<p>Lors de la création du composant, nous allons lui passer le modèle. À l'intérieur du composant celui-ci sera accessible en tant que la variable <code>opts</code>. </p>
+
+<p>Dans la vue nous avons défini la boucle <code>each={ liste }</code>, le contexte doit donc avoir accès à notre liste qui dans le modèle est le dictionnaire <code>data</code></p>
+
+<pre><code>&lt;script&gt;
+var ctx = this
+ctx.modele = opts
+ctx.liste = ctx.modele.data
+&lt;/script&gt;
+</code></pre>
+
+<p>Le fichier <code>lib/composants/a-faire-liste.tag</code> en entier:</p>
+
+<pre><code>&lt;a-faire-liste&gt;
+
+ &lt;div each={ liste } class="{fait ? 'liste-element fait' : 'liste-element a-faire'}"&gt;
+  &lt;div class="liste-element-info"&gt;
+   &lt;div class="liste-element-texte"&gt;
+    &lt;p&gt;{ text }&lt;/p&gt;
+   &lt;/div&gt;
+   &lt;div class="liste-element-modif"&gt;
+    &lt;span class="glyphicon glyphicon-pencil"&gt;&lt;/span&gt;
+   &lt;/div&gt;
+   &lt;div class="liste-element-statut"&gt;
+    &lt;span class="{fait ? 'glyphicon glyphicon-remove' : 'glyphicon glyphicon-ok'}"&gt;&lt;/span&gt;
+   &lt;/div&gt;
+  &lt;/div&gt;
+
+  &lt;div if={ maj } class="liste-element-maj"&gt;
+   &lt;div class="liste-element-maj-input"&gt;
+    &lt;input class="form-control" id="liste-element-maj-input" type="text"&gt;
+   &lt;/div&gt;
+   &lt;div class="liste-element-maj-bouton"&gt;
+    &lt;button class="btn btn-primary" id="liste-element-maj-bouton"&gt;OK&lt;/button&gt;
+   &lt;/div&gt;
+  &lt;/div&gt;
+
+ &lt;/div&gt; 
+
+ &lt;script&gt;
+var ctx = this
+ctx.modele = opts
+ctx.liste = ctx.modele.data
+ &lt;/script&gt;
+
+&lt;/a-faire-liste&gt;
+</code></pre>
+
+<h4>
+<a id="monter-le-composant" class="anchor" href="#monter-le-composant" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Monter le composant</h4>
+
+<p>Nous allons maintenant monter  <code>&lt;a-faire-liste&gt;</code> dans <code>main.js</code>.</p>
+
+<pre><code>var riot = require('riot')
+var Modele = require('./lib/Modele-a-faire')
+var aFaireListe = require('./lib/composants/a-faire-liste.tag')
+
+var modele = new Modele
+
+riot.mount('a-faire-liste', modele)
+</code></pre>
+
+<p>Pour vérifiez que tout fonctionne, lancez le scripte <code>watch</code>.</p>
+
+<pre><code>$ npm run watch
+</code></pre>
+
+<p>Et ouvrez <code>public/index.html</code> dans un navigateur.</p>
+
+<h4>
+<a id="les-contrôleurs-du-composant" class="anchor" href="#les-contr%C3%B4leurs-du-composant" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Les contrôleurs du composant</h4>
+
+<p>Nous allons maintenant ajouter les contrôleurs.</p>
+
+<p><strong>basculerFait</strong></p>
+
+<p>Quand l'icône est clickée, basculer fait.</p>
+
+<p>Dans le corps du composant:</p>
+
+<pre><code>&lt;div class="liste-element-statut"&gt;
+</code></pre>
+
+<p>devient</p>
+
+<pre><code>&lt;div class="liste-element-statut" onclick={ basculerFait }&gt;
+</code></pre>
+
+<p>Dans la balise <code>&lt;script&gt;</code> du composant:</p>
+
+<pre><code>var ctx = this
+ctx.modele = opts
+ctx.liste = ctx.modele.data
+
+ctx.basculerFait = function(e) {
+ var index = ctx.liste.indexOf(e.item)
+ ctx.modele.basculerFait(index)
+}
+</code></pre>
+
+<p>L'événement <code>onclick</code> passe l'élément de la liste à la fonction. C'est le <code>e</code>. Dans Riot, l'élément de la boucle est accessible par <code>e.item</code>. Nous trouvons l'index de l'élément dans la liste et appelons la méthode <code>.basculerFait()</code> du modèle.</p>
+
+<p>Si le scripte <code>watch</code> tourne encore, vous pouvez vérfier que tout marche dans le navigateur.</p>
+
+<p><strong>basculerMaj</strong></p>
+
+<p>Maintenant nous voulons montrer la balise <code>&lt;div class="liste-element-maj"&gt;</code> quand nous clickons l'icône avec le crayon.</p>
+
+<p>Dans le corps du composant:</p>
+
+<pre><code>&lt;div class="liste-element-modif" onclick={ basculerMaj }&gt;
+</code></pre>
+
+<p>Dans le scripte du composant:</p>
+
+<pre><code>ctx.basculerMaj = function(e) {
+ if(e.item.maj) { e.item.maj = undefined }
+ else {
+  ctx.liste.forEach(function(element) { element.maj = undefined })
+  e.item.maj = true
+ }
+}
+</code></pre>
+
+<p>Nous n'invoquons cette fois pas le modèle, parce que quel élément est en cours de modification ne le concerne pas. Le modèle représente les données sous-jacentes de l'application et ceci fait partie de la logique de présentation.</p>
+
+<p><strong>mettreAJour</strong></p>
+
+<p>Une fois le formulaire de mise à jour affiché, il faut que la clé <code>text</code> de l'élément soit modifiée lorsque le boutton est clické.</p>
+
+<p>Dans le corps du composant:</p>
+
+<pre><code>&lt;button class="btn btn-primary" onclick={ mettreAJour }&gt;OK&lt;/button&gt;
+</code></pre>
+
+<p>Dans le scripte du composant:</p>
+
+<pre><code>ctx.mettreAJour = function(e) {
+ var index = ctx.liste.indexOf(e.item)
+ var input = document.getElementById('liste-element-maj-input')
+ if(input.value) {
+  ctx.modele.mettreAJour(index, input.value)
+  input.value = ''
+  e.item.maj = undefined
+ }
+}
+</code></pre>
+
+<p>Testez dans le navigateur... </p>
+
+<h2>
+<a id="le-composant-a-faire-formulaire" class="anchor" href="#le-composant-a-faire-formulaire" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Le composant <code>&lt;a-faire-formulaire&gt;</code>
+</h2>
+
+<p>Dans <code>lib/composants</code>, créez un fichier <code>a-faire-formulaire.tag</code>.</p>
+
+<pre><code>&lt;a-faire-formulaire&gt;
+ &lt;div class="ajouter"&gt;
+  &lt;div class="ajouter-input"&gt;
+   &lt;input id="ajouter-input" class="form-control" placeholder="À faire" type="text"&gt;
+  &lt;/div&gt;
+  &lt;div class="ajouter-bouton"&gt;
+   &lt;button id="ajouter-bouton" class="btn btn-primary"&gt;Ajouter&lt;/button&gt;
+  &lt;/div&gt;
+ &lt;/div&gt;
+ &lt;div id="supprimer-fait"&gt;
+  &lt;button id="supprimer-fait-bouton" class="btn btn-danger"&gt;Supprimer ce qui a été fait&lt;/button&gt;
+ &lt;/div&gt;
+ &lt;script&gt;&lt;/script&gt;
+&lt;/a-faire-formulaire&gt;
+</code></pre>
+
+<p>J'ai ici repris le contenu de la <code>&lt;div id="formulaire"&gt;</code> de <code>index.html</code> du <a href="link_to_do">chapitre 1</a>.</p>
+
+<p>Dans le scripte du composant, je référence le contexte et le modèle.</p>
+
+<pre><code>var ctx = this
+ctx.modele = opts
+</code></pre>
+
+<p>Dans <code>main.js</code>, nous montons ce composant:</p>
+
+<pre><code>var riot = require('riot')
+var Modele = require('./lib/Modele-a-faire')
+var aFaireListe = require('./lib/composants/a-faire-liste.tag')
+var aFaireFormulaire = require('./lib/composants/a-faire-formulaire.tag') // &lt;- nouveau
+
+var modele = new Modele
+
+riot.mount('a-faire-liste', modele)
+riot.mount('a-faire-formulaire', modele) // &lt;- nouveau
+</code></pre>
+
+<h3>
+<a id="les-contrôleurs-de-a-faire-formulaire" class="anchor" href="#les-contr%C3%B4leurs-de-a-faire-formulaire" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Les contrôleurs de <code>&lt;a-faire-formulaire&gt;</code>:</h3>
+
+<p><strong>ajouter</strong></p>
+
+<p>Dans le corps du composant</p>
+
+<pre><code>&lt;button id="ajouter-bouton" class="btn btn-primary"&gt;Ajouter&lt;/button&gt;
+</code></pre>
+
+<p>devient</p>
+
+<pre><code>&lt;button id="ajouter-bouton" class="btn btn-primary" onclick={ ajouter }&gt;Ajouter&lt;/button&gt;
+</code></pre>
+
+<p>Dans le scripte du composant</p>
+
+<pre><code>ctx.ajouter = function() {
+ var input = document.getElementById('ajouter-input')
+ if(input.value) {
+  ctx.modele.ajouter(input.value)
+  input.value = ''
+ }
+}
+</code></pre>
+
+<p><strong>supprimerFait</strong></p>
+
+<p>Dans le corps du composant:</p>
+
+<pre><code>&lt;button id="supprimer-fait-bouton" class="btn btn-danger"&gt;Supprimer ce qui a été fait&lt;/button&gt;
+</code></pre>
+
+<p>devient</p>
+
+<pre><code>&lt;button id="supprimer-fait-bouton" class="btn btn-danger" onclick={ supprimerFait }&gt;Supprimer ce qui a été fait&lt;/button&gt;
+</code></pre>
+
+<p>Dans le scripte du composant</p>
+
+<pre><code>ctx.supprimerFait = function() {
+ ctx.modele.supprimerFait()
+}
+</code></pre>
+
+<p>Si <code>watch</code> tourne encore, ouvrons le navigateur pour voir si ça marche...</p>
+
+<p>Non, ça ne marche pas. Le composant <code>&lt;a-faire-liste&gt;</code> ne sait pas que le modèle a changé. Nous allons faire en sorte que le modèle puisse l'informer quand il doit être mis à jour.</p>
+
+<h2>
+<a id="emettre-un-événement" class="anchor" href="#emettre-un-%C3%A9v%C3%A9nement" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Emettre un événement</h2>
+
+<p>Ouvrez <code>lib/Model-a-faire.js</code>, en haut de la page, ajoutez:</p>
+
+<pre><code>var Event = require('events')
+</code></pre>
+
+<p>Nous n'avons pas besoin de télécharger la librairie <code>event</code> avec NPM, elle fait partie des fonctionnalités de base de Node. </p>
+
+<p>Créez une méthode "émetteur" <code>evt</code> dans le modèle:</p>
+
+<pre><code>ctx.evt = new Event
+</code></pre>
+
+<p>Quand un élément est ajouté, émettons un événement <code>ajout</code>.</p>
+
+<pre><code> ctx.ajouter = function(text) {
+  ctx.data.push({text: text, fait: false})
+  ctx.evt.emit('ajout')
+ }
+</code></pre>
+
+<p>Quand les éléments <code>fait</code> sont supprimés émettons un événement <code>suppression</code>.</p>
+
+<pre><code> ctx.supprimerFait = function() {
+  var aGarder = []
+  ctx.data.forEach(function(element) {
+   if(!element.fait) { aGarder.push(element) }
+  })
+  ctx.data = aGarder
+  ctx.evt.emit('suppression')
+ }
+</code></pre>
+
+<p>Dans le scripte du composant <code>lib/composants/a-faire-liste.tag</code> demandez au contexte <code>ctx</code> de se mettre à jour quand ces événements sont émis.</p>
+
+<pre><code>ctx.modele.evt.on('ajout', function() { 
+ ctx.liste = ctx.modele.data
+ ctx.update() 
+})
+
+ctx.modele.evt.on('suppression', function() { 
+ ctx.liste = ctx.modele.data
+ ctx.update() 
+})
+</code></pre>
+
+<p>Si tout fonctionne comme il faut, arrêtez le scripte <code>watch</code> (<code>ctrl-C</code>) et lancez <code>build</code> pour créer l'application.</p>
+
+<pre><code>$ npm run build
+</code></pre>
+
+<h2>
+<a id="conclusion" class="anchor" href="#conclusion" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Conclusion</h2>
+
+<p>Dans ce chapitre nous avons amélioré la lisibilité du code de l'application en créant des composants qui contiennent une vue et les contrôleurs associés. La structure de l'application est modulaire. Nous pouvons réutiliser ces composants dans d'autres parties de l'application ou dans une tout autre application. Le modèle fait ce qu'il a à faire sans ce soucier de la manière dont les données sont présentée.</p>
+
+<p>Nous avons vu comment l'utilisation de librairies externes comme <strong>handlebars</strong> et <strong>riot</strong> peuvent nous faciliter la vie. Dans le prochain chapitre nous allons utiliser le "framework" <strong>angular</strong> de Google.</p>
+      </section>
+    </div>
+
+    <!-- FOOTER  -->
+    <div id="footer_wrap" class="outer">
+      <footer class="inner">
+        <p class="copyright">Tutoriel-fullstack-js-4-riot maintained by <a href="https://github.com/idris-maps">idris-maps</a></p>
+        <p>Published with <a href="https://pages.github.com">GitHub Pages</a></p>
+      </footer>
+    </div>
+
+    
+
+  </body>
+</html>
