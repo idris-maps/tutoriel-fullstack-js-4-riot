@@ -31,6 +31,8 @@
     <!-- MAIN CONTENT -->
     <div id="main_content_wrap" class="outer">
       <section id="main_content" class="inner">
+        <p>Ce tutoriel est le chapitre 4 de la série <a href="http://idris-maps.github.io/tutoriel-fullstack-js">Fullstack JavaScript</a></p>
+<p> <a href="http://idris-maps.github.io/tutoriel-fullstack-js-3-handlebars">< Chapitre précédent</a> | <a href="http://idris-maps.github.io/tutoriel-fullstack-js-5-angular">Prochain chapitre > </a></p> 
         <h1>
 <a id="riot" class="anchor" href="#riot" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Riot</h1>
 
@@ -66,7 +68,7 @@
 <pre><code>$ npm init
 </code></pre>
 
-<p>Téléchargez les librairies <code>riot</code> et <code>riotify</code>. <code>riotify</code> comme <code>browserify-handlebars</code> dans le <a href="link_to_do">chapitre précédant</a> sert à convertir les fichiers <code>.tag</code> de riot en javascript lors de la construction du scripte final avec <code>browserify</code>.</p>
+<p>Téléchargez les librairies <code>riot</code> et <code>riotify</code>. <code>riotify</code> comme <code>browserify-handlebars</code> dans le <a href="http://idris-maps.github.io/tutoriel-fullstack-js-3-handlebars">chapitre précédent</a> sert à convertir les fichiers <code>.tag</code> de riot en javascript lors de la construction du scripte final avec <code>browserify</code>.</p>
 
 <pre><code>$ npm install riot riotify --save
 </code></pre>
@@ -92,7 +94,7 @@
 }
 </code></pre>
 
-<p>Dans <code>public</code>, ajoutez <code>style.css</code> du <a href="link_to_do">chapitre "Mise en page"</a> et créez un fichier <code>index.html</code> comme suit.</p>
+<p>Dans <code>public</code>, ajoutez <code>style.css</code> du <a href="http://idris-maps.github.io/tutoriel-fullstack-js-1-mise-en-page">chapitre "Mise en page"</a> et créez un fichier <code>index.html</code> comme suit.</p>
 
 <pre><code>&lt;!doctype html&gt;
 &lt;html&gt;
@@ -115,7 +117,7 @@
 &lt;/html&gt;
 </code></pre>
 
-<p>Créez un dossier <code>lib</code> et copiez y <code>Modele-a-faire.js</code> du <a href="link_to_do">chapitre 2</a> et créez un dossier <code>composants</code>.</p>
+<p>Créez un dossier <code>lib</code> et copiez y <code>Modele-a-faire.js</code> du <a href="http://idris-maps.github.io/tutoriel-fullstack-js-2-vanilla-js">chapitre 2</a> et créez un dossier <code>composants</code>.</p>
 
 <p>Notre dossier <code>4.riot</code> ressemble à ça:</p>
 
@@ -164,7 +166,7 @@
 &lt;/div&gt; 
 </code></pre>
 
-<p>J'ai pris le HTML d'un des éléments de liste de <code>index.html</code> du <a href="link_to_do">chapitre 1</a>. Celui qui est en cours de modification.</p>
+<p>J'ai pris le HTML d'un des éléments de liste de <code>index.html</code> du <a href="http://idris-maps.github.io/tutoriel-fullstack-js-1-mise-en-page">chapitre 1</a>. Celui qui est en cours de modification.</p>
 
 <p>Créez une balise <code>&lt;a-faire-liste&gt;</code> qui englobe tout le HTML et ajoutez y une balise <code>&lt;script&gt;</code>.</p>
 
@@ -406,7 +408,7 @@ ctx.basculerFait = function(e) {
 &lt;/a-faire-formulaire&gt;
 </code></pre>
 
-<p>J'ai ici repris le contenu de la <code>&lt;div id="formulaire"&gt;</code> de <code>index.html</code> du <a href="link_to_do">chapitre 1</a>.</p>
+<p>J'ai ici repris le contenu de la <code>&lt;div id="formulaire"&gt;</code> de <code>index.html</code> du <a href="http://idris-maps.github.io/tutoriel-fullstack-js-1-mise-en-page">chapitre 1</a>.</p>
 
 <p>Dans le scripte du composant, je référence le contexte et le modèle.</p>
 
@@ -535,6 +537,8 @@ ctx.modele.evt.on('suppression', function() {
 <p>Dans ce chapitre nous avons amélioré la lisibilité du code de l'application en créant des composants qui contiennent une vue et les contrôleurs associés. La structure de l'application est modulaire. Nous pouvons réutiliser ces composants dans d'autres parties de l'application ou dans une tout autre application. Le modèle fait ce qu'il a à faire sans ce soucier de la manière dont les données sont présentée.</p>
 
 <p>Nous avons vu comment l'utilisation de librairies externes comme <strong>handlebars</strong> et <strong>riot</strong> peuvent nous faciliter la vie. Dans le prochain chapitre nous allons utiliser le "framework" <strong>angular</strong> de Google.</p>
+      <p>Ce tutoriel est le chapitre 4 de la série <a href="http://idris-maps.github.io/tutoriel-fullstack-js">Fullstack JavaScript</a></p>
+<p> <a href="http://idris-maps.github.io/tutoriel-fullstack-js-3-handlebars">< Chapitre précédent</a> | <a href="http://idris-maps.github.io/tutoriel-fullstack-js-5-angular">Prochain chapitre > </a></p> 
       </section>
     </div>
 
